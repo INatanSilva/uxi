@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AnimatedTitle from './components/AnimatedTitle';
 import AnimatedPlaceholder from './components/AnimatedPlaceholder';
 import ServiceDialog from './components/ServiceDialog';
+import CompaniesMarquee from './components/CompaniesMarquee';
 import './App.css';
 
 function App() {
@@ -89,9 +90,9 @@ function App() {
         </form>
       </section>
 
-      {/* Camp Section */}
+      {/* Companies Section */}
       <section className="camp">
-        <p className="camp-text">camp</p>
+        <CompaniesMarquee isDarkMode={isDarkMode} />
       </section>
 
       {/* Product Section */}

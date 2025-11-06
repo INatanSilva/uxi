@@ -176,34 +176,8 @@
 
 /* Camp Section */
 .camp {
-  padding: 2rem;
-  text-align: center;
-  transition: border-color 0.3s ease;
-}
-
-.app.dark .camp {
-  border-top: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-}
-
-.app.light .camp {
-  border-top: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-}
-
-.camp-text {
-  font-size: 1.2rem;
-  text-transform: lowercase;
-  letter-spacing: 0.2em;
-  transition: color 0.3s ease;
-}
-
-.app.dark .camp-text {
-  color: #888888;
-}
-
-.app.light .camp-text {
-  color: #666666;
+  padding: 0;
+  width: 100%;
 }
 
 /* Sections */
