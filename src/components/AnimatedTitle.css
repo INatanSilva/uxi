@@ -1,0 +1,115 @@
+.animated-title {
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-weight: 900;
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.animated-text-container {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  width: 3ch;
+  height: 0.8em;
+  vertical-align: baseline;
+  line-height: 1;
+  text-align: right;
+}
+
+.animated-text {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 1;
+}
+
+.cascade-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(-20px);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: cascadeIn 0.5s ease-out forwards, gradientMove 6s ease-in-out infinite;
+  animation-delay: var(--cascade-delay, 0s), calc(var(--cascade-delay, 0s) + 0.5s);
+  will-change: background-position, opacity, transform;
+}
+
+.animated-title.dark .cascade-letter {
+  background-image: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #ffffff 25%,
+    #888888 50%,
+    #888888 75%,
+    #ffffff 100%
+  );
+  background-color: #ffffff;
+}
+
+.animated-title.light .cascade-letter {
+  background-image: linear-gradient(
+    90deg,
+    #000000 0%,
+    #000000 25%,
+    #666666 50%,
+    #666666 75%,
+    #000000 100%
+  );
+  background-color: #000000;
+}
+
+@keyframes cascadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+.static-text {
+  display: inline-block;
+  vertical-align: baseline;
+  line-height: 1;
+  margin-left: 0;
+  transition: color 0.3s ease;
+}
+
+.animated-title.dark .static-text {
+  color: #ffffff;
+}
+
+.animated-title.light .static-text {
+  color: #000000;
+}
+
