@@ -9,16 +9,18 @@ const ParticlesBackground = ({ isDarkMode }: ParticlesBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const canvasElement = canvasRef.current;
+    if (!canvasElement) {
+      return;
+    }
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvasElement.getContext('2d');
     if (!ctx) return;
 
     // Set canvas size
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvasElement.width = window.innerWidth;
+      canvasElement.height = window.innerHeight;
     };
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -31,10 +33,12 @@ const ParticlesBackground = ({ isDarkMode }: ParticlesBackgroundProps) => {
       speedX: number;
       speedY: number;
       opacity: number;
+      canvas: HTMLCanvasElement;
 
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+      constructor(canvas: HTMLCanvasElement) {
+        this.canvas = canvas;
+        this.x = Math.random() * this.canvas.width;
+        this.y = Math.random() * this.canvas.height;
         this.size = Math.random() * 2 + 0.5;
         this.speedX = Math.random() * 0.5 - 0.25;
         this.speedY = Math.random() * 0.5 - 0.25;
@@ -45,10 +49,10 @@ const ParticlesBackground = ({ isDarkMode }: ParticlesBackgroundProps) => {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
+        if (this.x > this.canvas.width) this.x = 0;
+        if (this.x < 0) this.x = this.canvas.width;
+        if (this.y > this.canvas.height) this.y = 0;
+        if (this.y < 0) this.y = this.canvas.height;
       }
 
       draw() {
@@ -63,16 +67,16 @@ const ParticlesBackground = ({ isDarkMode }: ParticlesBackgroundProps) => {
     }
 
     // Create particles
-    const particlesArray: Particle[] = [];
     const numberOfParticles = 100;
-
-    for (let i = 0; i < numberOfParticles; i++) {
-      particlesArray.push(new Particle());
-    }
+    const particlesArray: Particle[] = Array.from(
+      { length: numberOfParticles },
+      () => new Particle(canvasElement)
+    );
 
     // Animation loop
+    let animationFrameId: number;
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
       particlesArray.forEach(particle => {
         particle.update();
@@ -99,13 +103,14 @@ const ParticlesBackground = ({ isDarkMode }: ParticlesBackgroundProps) => {
         }
       }
 
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [isDarkMode]);
 
