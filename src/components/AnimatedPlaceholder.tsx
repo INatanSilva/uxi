@@ -24,7 +24,7 @@ const AnimatedPlaceholder = ({ isDarkMode }: AnimatedPlaceholderProps) => {
 
   useEffect(() => {
     const currentPhrase = phrases[currentPhraseIndex];
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
 
     if (isTyping && !isDeleting) {
       // Digitando
@@ -53,7 +53,11 @@ const AnimatedPlaceholder = ({ isDarkMode }: AnimatedPlaceholderProps) => {
       }
     }
 
-    return () => clearTimeout(timeout);
+    return () => {
+      if (timeout !== undefined) {
+        clearTimeout(timeout);
+      }
+    };
   }, [displayedText, isTyping, isDeleting, currentPhraseIndex, phrases]);
 
   return (
