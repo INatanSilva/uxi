@@ -1,0 +1,96 @@
+.scroll-indicator {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator:hover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.scroll-indicator-mouse {
+  width: 28px;
+  height: 45px;
+  border: 2px solid;
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.scroll-indicator.dark .scroll-indicator-mouse {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.scroll-indicator.light .scroll-indicator-mouse {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.scroll-indicator-wheel {
+  width: 4px;
+  height: 8px;
+  border-radius: 2px;
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+
+.scroll-indicator.dark .scroll-indicator-wheel {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.scroll-indicator.light .scroll-indicator-wheel {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.scroll-indicator-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-indicator.dark .scroll-indicator-arrow {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.scroll-indicator.light .scroll-indicator-arrow {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+@keyframes scrollBounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(10px);
+  }
+}
+
+@keyframes scrollWheel {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+}
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+  .scroll-indicator {
+    display: none;
+  }
+}
+

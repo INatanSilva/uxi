@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Navbar from './components/Navbar';
 import AnimatedTitle from './components/AnimatedTitle';
 import AnimatedPlaceholder from './components/AnimatedPlaceholder';
 import ServiceDialog from './components/ServiceDialog';
 import CompaniesMarquee from './components/CompaniesMarquee';
+import CustomCursor from './components/CustomCursor';
+import ParticlesBackground from './components/ParticlesBackground';
+import ScrollIndicator from './components/ScrollIndicator';
 import './App.css';
 
 function App() {
@@ -20,8 +24,33 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
+  // Intersection Observer for scroll animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach((title) => observer.observe(title));
+
+    return () => {
+      sectionTitles.forEach((title) => observer.unobserve(title));
+    };
+  }, []);
+
   return (
     <div className={`app ${isDarkMode ? 'dark' : 'light'}`}>
+      <CustomCursor />
+      <ParticlesBackground isDarkMode={isDarkMode} />
+      <Navbar isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
+      
       {/* Hero Section */}
       <section className="hero">
         <AnimatedTitle isDarkMode={isDarkMode} />
@@ -41,53 +70,8 @@ function App() {
               </div>
             )}
           </div>
-          <button 
-            type="button" 
-            className="theme-toggle-button" 
-            onClick={toggleTheme}
-            aria-label="Alternar tema"
-          >
-            {isDarkMode ? (
-              // Lua (Dark Mode)
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                className="theme-icon"
-              >
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            ) : (
-              // Sol (Light Mode)
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                className="theme-icon"
-              >
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2" />
-                <path d="M12 20v2" />
-                <path d="m4.93 4.93 1.41 1.41" />
-                <path d="m17.66 17.66 1.41 1.41" />
-                <path d="M2 12h2" />
-                <path d="M20 12h2" />
-                <path d="m6.34 17.66-1.41 1.41" />
-                <path d="m19.07 4.93-1.41 1.41" />
-              </svg>
-            )}
-          </button>
         </form>
+        <ScrollIndicator isDarkMode={isDarkMode} />
       </section>
 
       {/* Companies Section */}

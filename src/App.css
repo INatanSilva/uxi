@@ -2,16 +2,50 @@
   width: 100%;
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.03;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
 }
 
 .app.dark {
-  background-color: #000000;
+  background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
   color: #ffffff;
+  animation: gradientShift 15s ease infinite;
+  background-size: 200% 200%;
 }
 
 .app.light {
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #ffffff 100%);
   color: #000000;
+  animation: gradientShift 15s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Hero Section */
@@ -23,6 +57,32 @@
   justify-content: center;
   padding: 2rem;
   gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero > * {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.hero > *:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.hero > *:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-form {
@@ -38,13 +98,49 @@
   position: relative;
 }
 
+.hero-input-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero-input-wrapper:hover::before {
+  opacity: 1;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
 .hero-input {
   width: 100%;
   padding: 1.2rem 1.5rem;
   font-size: 1.1rem;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  border-radius: 12px;
+}
+
+.hero-input:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .hero-input-placeholder {
@@ -58,81 +154,43 @@
 }
 
 .app.dark .hero-input {
-  background-color: #000000;
-  border: 2px solid #ffffff;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: #ffffff;
+  backdrop-filter: blur(10px);
 }
 
 .app.light .hero-input {
-  background-color: #ffffff;
-  border: 2px solid #000000;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   color: #000000;
-}
-
-.app.dark .hero-input-placeholder {
-  color: #888888;
-}
-
-.app.light .hero-input-placeholder {
-  color: #666666;
+  backdrop-filter: blur(10px);
 }
 
 .app.dark .hero-input:focus {
-  border-color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
 }
 
 .app.light .hero-input:focus {
-  border-color: #000000;
+  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.theme-toggle-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-  font-weight: bold;
+.app.dark .hero-input-placeholder {
+  background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.theme-icon {
-  transition: transform 0.3s ease;
-  width: 20px;
-  height: 20px;
+.app.light .hero-input-placeholder {
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.app.dark .theme-toggle-button {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.app.light .theme-toggle-button {
-  background-color: #000000;
-  color: #ffffff;
-}
-
-.theme-toggle-button:hover {
-  transform: scale(1.1);
-}
-
-.theme-toggle-button:hover .theme-icon {
-  transform: rotate(15deg);
-}
-
-.app.dark .theme-toggle-button:hover {
-  background-color: #cccccc;
-}
-
-.app.light .theme-toggle-button:hover {
-  background-color: #333333;
-}
-
-.theme-toggle-button:active {
-  transform: scale(0.95);
-}
 
 .hero-button {
   width: 50px;
@@ -188,6 +246,19 @@
   justify-content: center;
   padding: 4rem 2rem;
   transition: border-color 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.section-title {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section-title.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .app.dark .section {
@@ -203,15 +274,20 @@
   font-weight: 900;
   text-align: center;
   letter-spacing: 0.1em;
-  transition: color 0.3s ease;
 }
 
 .app.dark .section-title {
-  color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .app.light .section-title {
-  color: #000000;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Footer */
@@ -233,15 +309,20 @@
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: 0.1em;
-  transition: color 0.3s ease;
 }
 
 .app.dark .footer-text {
-  color: #888888;
+  background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .app.light .footer-text {
-  color: #666666;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Responsive */
