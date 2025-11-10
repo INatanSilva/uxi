@@ -8,18 +8,29 @@ interface NavbarProps {
 
 const Navbar = ({ isDarkMode, onToggleTheme }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    checkMobile();
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   return (
-    <nav className={`navbar ${isScrolled ? 'scrolled' : ''} ${isDarkMode ? 'dark' : 'light'}`}>
+    <nav className={`navbar ${isScrolled || isMobile ? 'scrolled' : ''} ${isDarkMode ? 'dark' : 'light'}`}>
       <div className="navbar-content">
         <div className="navbar-logo">
           <span className="logo-text">UXI</span>

@@ -37,9 +37,17 @@
 }
 
 /* Hide default cursor on desktop */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   * {
     cursor: none !important;
+  }
+}
+
+/* Hide custom cursor on mobile/tablet */
+@media (max-width: 768px) {
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
   }
 }
 
