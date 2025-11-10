@@ -80,17 +80,17 @@ function App() {
       </section>
 
       {/* Product Section */}
-      <section className="section product">
+      <section id="product" className="section product">
         <h2 className="section-title">PRODUCT</h2>
       </section>
 
       {/* Feedback Section */}
-      <section className="section feedback">
+      <section id="feedback" className="section feedback">
         <h2 className="section-title">FEEDBACK</h2>
       </section>
 
       {/* Contact Section */}
-      <section className="section contact">
+      <section id="contact" className="section contact">
         <h2 className="section-title">CONTACT</h2>
       </section>
 
