@@ -33,7 +33,8 @@ const Navbar = ({ isDarkMode, onToggleTheme }: NavbarProps) => {
     <nav className={`navbar ${isScrolled || isMobile ? 'scrolled' : ''} ${isDarkMode ? 'dark' : 'light'}`}>
       <div className="navbar-content">
         <div className="navbar-logo">
-          <span className="logo-text">UXI</span>
+          <img src="/iconuxi.png" alt="UXI Logo" className="logo-image" />
+          {/*<span className="logo-text">UXI</span>*/}
         </div>
 
         <div className="navbar-links">

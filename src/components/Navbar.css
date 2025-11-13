@@ -52,6 +52,18 @@
 .navbar-logo {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  transition: all 0.3s ease;
+  filter: brightness(1.2);
+}
+
+.navbar.light .logo-image {
+  filter: brightness(0.2);
 }
 
 .logo-text {
@@ -203,6 +215,10 @@
     font-size: 0.85rem;
   }
 
+  .logo-image {
+    height: 32px;
+  }
+
   .logo-text {
     font-size: 1.125rem;
   }
@@ -238,6 +254,10 @@
 
   .navbar-link {
     font-size: 0.8rem;
+  }
+
+  .logo-image {
+    height: 28px;
   }
 
   .logo-text {
