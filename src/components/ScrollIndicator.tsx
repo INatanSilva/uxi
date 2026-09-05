@@ -13,19 +13,21 @@ const ScrollIndicator = ({ isDarkMode }: ScrollIndicatorProps) => {
   };
 
   return (
-    <div 
+    <button
+      type="button"
       className={`scroll-indicator ${isDarkMode ? 'dark' : 'light'}`}
       onClick={handleClick}
+      aria-label="Continuar a ver"
     >
-      <div className="scroll-indicator-mouse">
-        <div className="scroll-indicator-wheel"></div>
-      </div>
-      <div className="scroll-indicator-arrow">
+      <span className="scroll-indicator-mouse">
+        <span className="scroll-indicator-wheel"></span>
+      </span>
+      <span className="scroll-indicator-arrow" aria-hidden="true">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 5v14M19 12l-7 7-7-7"/>
+          <path d="M12 5v14M19 12l-7 7-7-7" />
         </svg>
-      </div>
-    </div>
+      </span>
+    </button>
   );
 };
 

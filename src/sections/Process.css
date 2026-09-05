@@ -1,0 +1,53 @@
+.process-list {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.process-step {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  position: relative;
+}
+
+.process-step + .process-step {
+  border-top: 1px solid;
+}
+
+.process.dark .process-step + .process-step { border-color: rgba(255, 255, 255, 0.1); }
+.process.light .process-step + .process-step { border-color: rgba(0, 0, 0, 0.1); }
+
+.process-step-num {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  width: 2.5rem;
+  padding-top: 0.15rem;
+  opacity: 0.4;
+}
+
+.process-step-body h3 {
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+
+.process-step-body p {
+  margin: 0;
+  line-height: 1.55;
+  opacity: 0.72;
+}
+
+@media (max-width: 600px) {
+  .process-step {
+    gap: 0.9rem;
+  }
+  .process-step-num {
+    width: 2rem;
+  }
+}

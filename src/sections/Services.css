@@ -1,0 +1,113 @@
+.services-grid {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.service-card {
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.services.dark .service-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.services.light .service-card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.services.dark .service-card.open { border-color: rgba(255, 255, 255, 0.35); }
+.services.light .service-card.open { border-color: rgba(0, 0, 0, 0.35); }
+
+.service-card-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.35rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.service-card-header:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+.service-card-index {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.45;
+}
+
+.service-card-title {
+  flex: 1;
+  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+  font-weight: 700;
+}
+
+.service-card-toggle {
+  font-size: 1.4rem;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.service-card-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.service-card.open .service-card-body {
+  grid-template-rows: 1fr;
+}
+
+.service-card-body > * {
+  overflow: hidden;
+}
+
+.service-card-body p {
+  padding: 0 1.35rem;
+  margin: 0 0 0.9rem;
+  line-height: 1.55;
+  opacity: 0.75;
+}
+
+.service-card.open .service-card-body p {
+  padding-top: 0.25rem;
+}
+
+.service-card-body ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0 1.35rem 1.35rem;
+  margin: 0;
+}
+
+.service-card-body li {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+}
+
+.services.dark .service-card-body li { background: rgba(255, 255, 255, 0.08); }
+.services.light .service-card-body li { background: rgba(0, 0, 0, 0.06); }
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card-body {
+    transition: none;
+  }
+}
