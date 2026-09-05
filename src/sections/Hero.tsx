@@ -1,6 +1,5 @@
 import AnimatedTitle from '../components/AnimatedTitle';
 import AnimatedPlaceholder from '../components/AnimatedPlaceholder';
-import ScrollIndicator from '../components/ScrollIndicator';
 import { hero } from '../data/site';
 import './Hero.css';
 
@@ -42,8 +41,6 @@ const Hero = ({ isDarkMode, onOpenModal }: HeroProps) => {
           {hero.secondaryCta}
         </a>
       </div>
-
-      <ScrollIndicator isDarkMode={isDarkMode} />
     </section>
   );
 };
