@@ -54,17 +54,26 @@ pnpm preview
 ```
 uxi/
 ├── src/
-│   ├── components/    # Componentes reutilizáveis
-│   ├── screens/       # Páginas/Telas
-│   ├── utils/         # Funções utilitárias
-│   ├── types/         # Tipos TypeScript
-│   ├── App.tsx        # Componente principal
+│   ├── components/    # Componentes de UI reutilizáveis (Navbar, ContactModal, ...)
+│   ├── sections/      # Secções da landing page (Hero, Services, Process, ...)
+│   ├── data/          # site.ts — todo o conteúdo do site (FICTÍCIO, ver TODO UXI)
+│   ├── lib/           # Helpers (construção da mensagem de contacto)
+│   ├── App.tsx        # Composição da página + tema + modal
 │   ├── main.tsx       # Ponto de entrada
-│   └── index.css      # Estilos globais
-├── public/            # Arquivos estáticos
-├── index.html         # HTML principal
+│   ├── App.css        # Layout e secções
+│   └── index.css      # Reset + estilos globais
+├── public/            # Ficheiros estáticos (favicon)
+├── index.html         # HTML + meta tags / SEO
 └── vite.config.ts     # Configuração do Vite
 ```
+
+## Contacto / formulário
+
+O modal de contacto **não tem backend**. Ao submeter, abre o WhatsApp (e oferece
+email como alternativa) com a mensagem preenchida. Configurar números e email em
+`src/data/site.ts`. Para receber leads automaticamente no futuro, substituir a
+lógica de submit em `src/components/ContactModal.tsx` por uma chamada a uma
+Serverless Function (ex.: Vercel + Resend).
 
 ## Scripts Disponíveis
 

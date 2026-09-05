@@ -5,117 +5,124 @@ interface ParticlesBackgroundProps {
   isDarkMode: boolean;
 }
 
+interface P {
+  x: number;
+  y: number;
+  size: number;
+  vx: number;
+  vy: number;
+  o: number;
+}
+
 const ParticlesBackground = ({ isDarkMode }: ParticlesBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const darkRef = useRef(isDarkMode);
 
   useEffect(() => {
-    const canvasElement = canvasRef.current;
-    if (!canvasElement) {
-      return;
-    }
+    darkRef.current = isDarkMode;
+  }, [isDarkMode]);
 
-    const ctx = canvasElement.getContext('2d');
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
-    const resizeCanvas = () => {
-      canvasElement.width = window.innerWidth;
-      canvasElement.height = window.innerHeight;
+    let width = 0;
+    let height = 0;
+    let particles: P[] = [];
+    const LINK_DIST = 120;
+
+    const build = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      // Densidade por área, com limites — bem menos em ecrãs pequenos.
+      const count = Math.min(90, Math.max(24, Math.round((width * height) / 22000)));
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 1.6 + 0.5,
+        vx: Math.random() * 0.4 - 0.2,
+        vy: Math.random() * 0.4 - 0.2,
+        o: Math.random() * 0.4 + 0.2,
+      }));
     };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    build();
 
-    // Particle class
-    class Particle {
-      x: number;
-      y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      opacity: number;
-      canvas: HTMLCanvasElement;
+    let raf = 0;
+    const frame = () => {
+      const dark = darkRef.current;
+      ctx.clearRect(0, 0, width, height);
 
-      constructor(canvas: HTMLCanvasElement) {
-        this.canvas = canvas;
-        this.x = Math.random() * this.canvas.width;
-        this.y = Math.random() * this.canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
-        this.opacity = Math.random() * 0.5 + 0.2;
-      }
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = width;
+        else if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        else if (p.y > height) p.y = 0;
 
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x > this.canvas.width) this.x = 0;
-        if (this.x < 0) this.x = this.canvas.width;
-        if (this.y > this.canvas.height) this.y = 0;
-        if (this.y < 0) this.y = this.canvas.height;
-      }
-
-      draw() {
-        if (!ctx) return;
-        ctx.fillStyle = isDarkMode 
-          ? `rgba(255, 255, 255, ${this.opacity})` 
-          : `rgba(0, 0, 0, ${this.opacity * 0.3})`;
+        ctx.fillStyle = dark
+          ? `rgba(255,255,255,${p.o})`
+          : `rgba(0,0,0,${p.o * 0.3})`;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
       }
-    }
 
-    // Create particles
-    const numberOfParticles = 100;
-    const particlesArray: Particle[] = Array.from(
-      { length: numberOfParticles },
-      () => new Particle(canvasElement)
-    );
-
-    // Animation loop
-    let animationFrameId: number;
-    const animate = () => {
-      ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-      particlesArray.forEach(particle => {
-        particle.update();
-        particle.draw();
-      });
-
-      // Draw connections
-      for (let i = 0; i < particlesArray.length; i++) {
-        for (let j = i + 1; j < particlesArray.length; j++) {
-          const dx = particlesArray[i].x - particlesArray[j].x;
-          const dy = particlesArray[i].y - particlesArray[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 120) {
-            ctx.strokeStyle = isDarkMode
-              ? `rgba(255, 255, 255, ${0.1 * (1 - distance / 120)})`
-              : `rgba(0, 0, 0, ${0.05 * (1 - distance / 120)})`;
-            ctx.lineWidth = 0.5;
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < LINK_DIST * LINK_DIST) {
+            const alpha = 1 - Math.sqrt(distSq) / LINK_DIST;
+            ctx.strokeStyle = dark
+              ? `rgba(255,255,255,${0.1 * alpha})`
+              : `rgba(0,0,0,${0.05 * alpha})`;
             ctx.beginPath();
-            ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-            ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
           }
         }
       }
 
-      animationFrameId = requestAnimationFrame(animate);
+      raf = requestAnimationFrame(frame);
     };
 
-    animate();
+    const start = () => {
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    const onVisibility = () => (document.hidden ? stop() : start());
+
+    let resizeTimer = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(build, 200);
+    };
+
+    start();
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('resize', onResize);
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationFrameId);
+      stop();
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('resize', onResize);
+      window.clearTimeout(resizeTimer);
     };
-  }, [isDarkMode]);
+  }, []);
 
-  return <canvas ref={canvasRef} className="particles-background" />;
+  return <canvas ref={canvasRef} className="particles-background" aria-hidden="true" />;
 };
 
 export default ParticlesBackground;
-

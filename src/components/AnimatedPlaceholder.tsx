@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { projectPhrases } from '../data/site';
 import './AnimatedPlaceholder.css';
 
 interface AnimatedPlaceholderProps {
@@ -7,67 +8,50 @@ interface AnimatedPlaceholderProps {
 
 const AnimatedPlaceholder = ({ isDarkMode }: AnimatedPlaceholderProps) => {
   void isDarkMode;
-  const phrases = [
-    'Eu quero uma landing page',
-    'Eu quero um aplicativo',
-    'Eu quero automações',
-    'Eu quero um site',
-    'Eu quero um design',
-    'Eu quero uma identidade visual',
-    'Eu quero um e-commerce',
-    'Eu quero um sistema web',
-  ];
-
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const currentPhrase = phrases[currentPhraseIndex];
-    let timeout: ReturnType<typeof setTimeout> | undefined;
+    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, []);
 
-    if (isTyping && !isDeleting) {
-      // Digitando
-      if (displayedText.length < currentPhrase.length) {
-        timeout = setTimeout(() => {
-          setDisplayedText(currentPhrase.slice(0, displayedText.length + 1));
-        }, 100); // Velocidade de digitação
-      } else {
-        // Terminou de digitar, espera 9 segundos
-        timeout = setTimeout(() => {
-          setIsDeleting(true);
-          setIsTyping(false);
-        }, 9000);
-      }
-    } else if (isDeleting) {
-      // Apagando
-      if (displayedText.length > 0) {
-        timeout = setTimeout(() => {
-          setDisplayedText(displayedText.slice(0, -1));
-        }, 50); // Velocidade de apagar (mais rápido)
-      } else {
-        // Terminou de apagar, vai para próxima frase
-        setIsDeleting(false);
-        setIsTyping(true);
-        setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
-      }
+  useEffect(() => {
+    if (reduced) {
+      setText(projectPhrases[0]);
+      return;
     }
 
-    return () => {
-      if (timeout !== undefined) {
-        clearTimeout(timeout);
+    const full = projectPhrases[index];
+    let delay = deleting ? 35 : 65;
+
+    if (!deleting && text === full) {
+      delay = 2600;
+    } else if (deleting && text === '') {
+      delay = 300;
+    }
+
+    const timeout = setTimeout(() => {
+      if (!deleting && text === full) {
+        setDeleting(true);
+      } else if (deleting && text === '') {
+        setDeleting(false);
+        setIndex((i) => (i + 1) % projectPhrases.length);
+      } else {
+        setText(full.slice(0, deleting ? text.length - 1 : text.length + 1));
       }
-    };
-  }, [displayedText, isTyping, isDeleting, currentPhraseIndex, phrases]);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [text, deleting, index, reduced]);
 
   return (
     <span className="animated-placeholder">
-      {displayedText}
-      <span className="cursor">|</span>
+      {text}
+      <span className="cursor" aria-hidden="true">|</span>
     </span>
   );
 };
 
 export default AnimatedPlaceholder;
-

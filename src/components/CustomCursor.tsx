@@ -1,60 +1,63 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './CustomCursor.css';
 
 const CustomCursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    const updatePosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+    const fine = window.matchMedia('(pointer: fine)').matches;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!fine || reduced) return;
+
+    setEnabled(true);
+    document.body.classList.add('has-custom-cursor');
+
+    let frame = 0;
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight / 2;
+
+    const render = () => {
+      const t = `translate(calc(${x}px - 50%), calc(${y}px - 50%))`;
+      if (ringRef.current) ringRef.current.style.transform = t;
+      if (dotRef.current) dotRef.current.style.transform = t;
+      frame = 0;
     };
 
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
+    const onMove = (e: MouseEvent) => {
+      x = e.clientX;
+      y = e.clientY;
+      if (!frame) frame = requestAnimationFrame(render);
+    };
 
-    // Add mouse move listener
-    window.addEventListener('mousemove', updatePosition);
+    const isInteractive = (el: EventTarget | null) =>
+      el instanceof Element && !!el.closest('a, button, input, textarea, select, [role="button"]');
 
-    // Add hover listeners to interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, input, [role="button"]');
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-    });
+    const onOver = (e: MouseEvent) => {
+      ringRef.current?.classList.toggle('hovering', isInteractive(e.target));
+      dotRef.current?.classList.toggle('hovering', isInteractive(e.target));
+    };
+
+    window.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseover', onOver);
 
     return () => {
-      window.removeEventListener('mousemove', updatePosition);
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
-      });
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseover', onOver);
+      if (frame) cancelAnimationFrame(frame);
+      document.body.classList.remove('has-custom-cursor');
     };
-  }, [isVisible]);
+  }, []);
 
-  if (!isVisible) return null;
+  if (!enabled) return null;
 
   return (
     <>
-      <div
-        className={`custom-cursor ${isHovering ? 'hovering' : ''}`}
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-        }}
-      />
-      <div
-        className={`custom-cursor-dot ${isHovering ? 'hovering' : ''}`}
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-        }}
-      />
+      <div ref={ringRef} className="custom-cursor" aria-hidden="true" />
+      <div ref={dotRef} className="custom-cursor-dot" aria-hidden="true" />
     </>
   );
 };
 
 export default CustomCursor;
-

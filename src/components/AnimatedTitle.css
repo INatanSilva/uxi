@@ -1,129 +1,68 @@
 .animated-title {
-  font-size: clamp(3rem, 8vw, 8rem);
+  font-size: clamp(3.5rem, 12vw, 9rem);
   font-weight: 900;
   text-align: center;
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 0;
   line-height: 1;
-  white-space: nowrap;
-  transform: translateX(-4vw);
-  padding-right: 4vw;
+  max-width: 100%;
 }
 
 .animated-text-container {
-  display: inline-block;
+  display: inline-flex;
   position: relative;
   overflow: hidden;
-  width: 3ch;
-  height: 0.8em;
-  vertical-align: baseline;
-  line-height: 1;
-  text-align: right;
+  min-width: 3ch;
+  height: 1em;
+  justify-content: center;
+  align-items: center;
 }
 
 .animated-text {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
+  justify-content: center;
   line-height: 1;
 }
 
 .cascade-letter {
   display: inline-block;
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(-18px);
+  background-image: linear-gradient(90deg, #ffffff 0%, #c0c0c0 25%, #808080 50%, #c0c0c0 75%, #ffffff 100%);
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  animation: cascadeIn 0.5s ease-out forwards, gradientMove 6s ease-in-out infinite;
-  animation-delay: var(--cascade-delay, 0s), calc(var(--cascade-delay, 0s) + 0.5s);
-  will-change: background-position, opacity, transform;
-}
-
-.animated-title.dark .cascade-letter {
-  background-image: linear-gradient(
-    90deg,
-    #ffffff 0%,
-    #c0c0c0 25%,
-    #808080 50%,
-    #c0c0c0 75%,
-    #ffffff 100%
-  );
-  background-color: #ffffff;
+  animation: cascadeIn 0.45s ease-out forwards, gradientMove 6s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 .animated-title.light .cascade-letter {
-  background-image: linear-gradient(
-    90deg,
-    #1a1a1a 0%,
-    #4a4a4a 25%,
-    #6a6a6a 50%,
-    #4a4a4a 75%,
-    #1a1a1a 100%
-  );
-  background-color: #1a1a1a;
+  background-image: linear-gradient(90deg, #1a1a1a 0%, #4a4a4a 25%, #6a6a6a 50%, #4a4a4a 75%, #1a1a1a 100%);
 }
 
 @keyframes cascadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 @keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-
-.static-text {
-  display: inline-block;
-  vertical-align: baseline;
-  line-height: 1;
-  margin-left: 0;
-  transition: color 0.3s ease;
-}
-
-.animated-title.dark .static-text {
-  background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 50%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.animated-title.light .static-text {
-  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-@media (max-width: 768px) {
-  .animated-title {
-    transform: translateX(0);
+@media (prefers-reduced-motion: reduce) {
+  .cascade-letter {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
-
