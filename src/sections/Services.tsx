@@ -40,12 +40,14 @@ const Services = ({ isDarkMode }: ServicesProps) => {
               </button>
 
               <div className="service-card-body">
-                <p>{service.description}</p>
-                <ul>
-                  {service.deliverables.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
+                <div className="service-card-inner">
+                  <p>{service.description}</p>
+                  <ul>
+                    {service.deliverables.map((d) => (
+                      <li key={d}>{d}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </article>
           );

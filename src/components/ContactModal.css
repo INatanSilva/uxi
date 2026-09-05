@@ -24,6 +24,7 @@
   width: 100%;
   max-width: 560px;
   max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
   border-radius: 16px;
   padding: 2.25rem;
@@ -315,6 +316,7 @@
   .cm-content {
     max-width: 100%;
     max-height: 92vh;
+    max-height: 92dvh;
     border-radius: 20px 20px 0 0;
     padding: 1.75rem 1.25rem 1.5rem;
     animation: cmSheet 0.25s ease;
@@ -326,6 +328,15 @@
 
   .cm-title {
     font-size: 1.35rem;
+  }
+
+  .cm-success-actions {
+    flex-direction: column;
+  }
+
+  .cm-success-actions .cm-btn {
+    flex: none;
+    width: 100%;
   }
 }
 

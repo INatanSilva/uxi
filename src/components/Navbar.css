@@ -187,7 +187,20 @@
   padding: 0.7rem 2rem;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1100px) {
+  .navbar-links {
+    gap: 1.35rem;
+  }
+  .navbar-link {
+    font-size: 0.9rem;
+  }
+  .navbar-cta {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 900px) {
   .navbar {
     padding: 0.875rem 1.25rem;
   }
@@ -215,7 +228,10 @@
     padding: 4.75rem 1.25rem 1.5rem;
     transform: translateY(-101%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: -1;
+    z-index: 0;
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow-y: auto;
   }
 
   .navbar.dark .navbar-links {

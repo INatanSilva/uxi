@@ -12,7 +12,11 @@
   z-index: 1;
 }
 
-.hero > * {
+.hero-eyebrow,
+.hero .animated-title,
+.hero-subtitle,
+.hero-prompt,
+.hero-actions {
   animation: heroFadeUp 0.7s ease-out both;
 }
 
@@ -172,11 +176,25 @@
   }
   .hero-btn {
     flex: 1 1 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-actions {
+    flex-direction: column;
+  }
+  .hero-btn {
+    width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero > * {
+  .hero-eyebrow,
+  .hero .animated-title,
+  .hero-subtitle,
+  .hero-prompt,
+  .hero-actions {
     animation: none;
   }
 }

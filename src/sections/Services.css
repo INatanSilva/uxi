@@ -66,6 +66,7 @@
 .service-card-body {
   display: grid;
   grid-template-rows: 0fr;
+  min-height: 0;
   transition: grid-template-rows 0.25s ease;
 }
 
@@ -73,8 +74,9 @@
   grid-template-rows: 1fr;
 }
 
-.service-card-body > * {
+.service-card-inner {
   overflow: hidden;
+  min-height: 0;
 }
 
 .service-card-body p {
@@ -85,7 +87,7 @@
 }
 
 .service-card.open .service-card-body p {
-  padding-top: 0.25rem;
+  padding-top: 0.75rem;
 }
 
 .service-card-body ul {
